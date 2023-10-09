@@ -7,6 +7,8 @@ import br.com.usp.mac0332.snippettool.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserService {
 
@@ -19,5 +21,9 @@ public class UserService {
 
     public User findByUsername(String name) {
         return repo.findByUsername(name);
+    }
+
+    public List<User> findAll() {
+        return repo.findAll();
     }
 }
