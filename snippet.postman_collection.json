@@ -1,0 +1,195 @@
+{
+	"info": {
+		"_postman_id": "afc06c64-9f50-465f-a604-765a47eda938",
+		"name": "snippet",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "findUser",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/user/findByName?name=Joker",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user",
+						"findByName"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "Joker"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "findAll User",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/user/findByName?name=Joker",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user",
+						"findByName"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "Joker"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "findFolder",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/folder/findByName?name=Makoto",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"folder",
+						"findByName"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "Makoto"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "findAll Folder",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/folder/findByName?name=Makoto",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"folder",
+						"findByName"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "Makoto"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addFolder",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "8080dc59-4821-48d1-b63e-e7d9c61f4d86",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "user",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Makoto\",\n    \"creationDate\": \"2023-08-28\",\n    \"user\": {\n        \"id\": 1,\n        \"username\": \"Joker\",\n        \"email\": \"nijima@gmail.com\",\n        \"password\": \"Ren\",\n        \"registrationDate\": \"2023-08-27\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/folder/add",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"folder",
+						"add"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addUser",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "8080dc59-4821-48d1-b63e-e7d9c61f4d86",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "user",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Makoto\",\n    \"creationDate\": \"2023-08-28\",\n    \"user\": \"Joker\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/folder/add",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"folder",
+						"add"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -1,0 +1,25 @@
+services:
+  pgsql:
+    image: postgres:15.3@sha256:362a63cb1e864195ea2bc29b5066bdb222bc9a4461bfaff2418f63a06e56bce0
+    restart: always
+    user: postgres
+    ports:
+      - 5432:5432
+    secrets:
+      - sql-password
+    environment:
+      - POSTGRES_PASSWORD_FILE=/run/secrets/sql-password
+    volumes:
+      #- db-sql:/var/lib/postgresql/data
+      - ./init-postgresql.sh:/docker-entrypoint-initdb.d/init-postgresql.sh
+    healthcheck:
+      test: [ "CMD", "pg_isready" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 120s
+#volumes:
+  #db-sql:
+secrets:
+  sql-password:
+    file: ./sql-password.txt
