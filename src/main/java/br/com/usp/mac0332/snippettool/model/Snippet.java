@@ -42,4 +42,16 @@ public class Snippet {
 	@ManyToMany(mappedBy = "snippets")
 	private Set<Tag> tags;
 
+	public void update(Snippet updatedSnippet) {
+		if (updatedSnippet.getName() != null) {
+			this.name = updatedSnippet.getName();
+		}
+		if (updatedSnippet.getContent() != null) {
+			this.content = updatedSnippet.getContent();
+		}
+		if (updatedSnippet.getCreationDate() != null) {
+			this.creationDate = updatedSnippet.getCreationDate();
+		}
+	}
+
 }
