@@ -42,3 +42,8 @@ devenv.local.nix
 # pre-commit
 .pre-commit-config.yaml
 
+# dev properties
+application-dev.properties
+
+# mac
+.DS_Store
