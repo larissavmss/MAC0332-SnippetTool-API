@@ -45,4 +45,13 @@ public class Tag {
 	@JoinTable(name = "tag_snippet", joinColumns = @JoinColumn(name = "tag_id"), inverseJoinColumns = @JoinColumn(name = "snippet_id"))
 	private Set<Snippet> snippets;
 
+	public void update(Tag updatedTag) {
+		if (updatedTag.name != null) {
+			this.setName(updatedTag.name);
+		}
+		if (updatedTag.color != null) {
+			this.setColor(updatedTag.getColor());
+		}
+	}
+
 }
