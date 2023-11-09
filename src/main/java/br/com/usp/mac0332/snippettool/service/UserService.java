@@ -22,31 +22,13 @@ public class UserService implements UserDetailsService {
     @Autowired
     PasswordEncoder passwordEncoder;
 
-    public void addUser(User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        repo.save(user);
-    }
-
-
-    public UserDetails loadUserByUsername(Login login) throws UsernameNotFoundException {
-        var userFromDb = repo.findByUsername(login.getUsername());
-        if (userFromDb == null && login.getEmail() != ""){
-            return repo.save(createUserFromLogin(login));
-        }
-        if (userFromDb != null && passwordEncoder.matches(login.getPassword(), userFromDb.getPassword())){
-            return userFromDb;
-        } else {
-            throw new UsernameNotFoundException("");
-        }
-    }
-
-    private User createUserFromLogin(Login login){
+    public void createUserFromLogin(Login login){
         var user = new User();
         user.setPassword(passwordEncoder.encode(login.getPassword()));
         user.setUsername(login.getUsername());
         user.setRegistrationDate(Date.valueOf(LocalDate.now()));
         user.setEmail(login.getEmail());
-        return user;
+        repo.save(user);
     }
 
     public User findByUsername(String name) {
@@ -59,6 +41,7 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return repo.findByUsername(username);
+        var user = repo.findByUsername(username);
+        return new MyUserDetails(user);
     }
 }
