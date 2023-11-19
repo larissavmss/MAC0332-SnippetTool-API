@@ -1,21 +1,15 @@
 package br.com.usp.mac0332.snippettool.model;
 
-import static jakarta.persistence.GenerationType.IDENTITY;
-
-import java.sql.Date;
-import java.time.LocalDate;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.sql.Date;
+import java.time.LocalDate;
+
+import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Table(name = "folder", schema = "public")
@@ -36,6 +30,12 @@ public class Folder {
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private User user;
+
+	public Folder (String folderName, User user) {
+		this.creationDate = Date.valueOf(LocalDate.now());
+		this.name = folderName;
+		this.user = user;
+	}
 
 	@PrePersist
 	public void onCreate() {

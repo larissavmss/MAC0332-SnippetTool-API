@@ -1,20 +1,16 @@
 package br.com.usp.mac0332.snippettool.controller;
 
-import java.util.List;
-
+import br.com.usp.mac0332.snippettool.model.Folder;
+import br.com.usp.mac0332.snippettool.model.FolderName;
+import br.com.usp.mac0332.snippettool.service.FolderService;
+import br.com.usp.mac0332.snippettool.service.MyUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.*;
 
-import br.com.usp.mac0332.snippettool.model.Folder;
-import br.com.usp.mac0332.snippettool.service.FolderService;
+import java.util.List;
 
 @RestController
 @RequestMapping("folder")
@@ -24,14 +20,14 @@ public class FolderController {
 	FolderService folderService;
 
 	@PostMapping
-	public ResponseEntity<Folder> addFolder(@RequestBody Folder folder) {
-		Folder response = folderService.addFolder(folder);
+	public ResponseEntity<Folder> addFolder(@RequestBody FolderName name, @AuthenticationPrincipal UserDetails userDetails) {
+		Folder response = folderService.addFolder(name.name, ((MyUserDetails) userDetails).user);
 		return ResponseEntity.ok(response);
 	}
 
 	@GetMapping
-	public ResponseEntity<List<Folder>> getAll() {
-		List<Folder> response = folderService.getAll();
+	public ResponseEntity<List<Folder>> getAll(@AuthenticationPrincipal UserDetails userDetails) {
+		List<Folder> response = folderService.getAll(((MyUserDetails) userDetails).user.id);
 		return ResponseEntity.ok(response);
 	}
 
@@ -48,8 +44,9 @@ public class FolderController {
 	}
 
 	@DeleteMapping("/{folderId}")
-	public ResponseEntity<Void> deleteFolder(@PathVariable Integer folderId) {
+	public ResponseEntity<Void> deleteFolder(@PathVariable Integer folderId, @AuthenticationPrincipal UserDetails userDetails) {
 		folderService.deleteFolder(folderId);
 		return ResponseEntity.noContent().build();
 	}
+
 }

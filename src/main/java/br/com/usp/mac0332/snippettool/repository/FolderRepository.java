@@ -11,5 +11,5 @@ public interface FolderRepository extends JpaRepository<Folder, Integer> {
 
     Folder save(Folder folder);
 
-    List<Folder> findAll();
+    List<Folder> findAllByUserId(Integer id);
 }

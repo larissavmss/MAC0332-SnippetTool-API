@@ -1,14 +1,14 @@
 package br.com.usp.mac0332.snippettool.service;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import br.com.usp.mac0332.snippettool.model.Folder;
+import br.com.usp.mac0332.snippettool.model.User;
 import br.com.usp.mac0332.snippettool.repository.FolderRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class FolderService {
@@ -17,7 +17,10 @@ public class FolderService {
 	FolderRepository repository;
 
 	@Transactional
-	public Folder addFolder(Folder folder) {
+	public Folder addFolder(String folderName, User user) {
+		var folder = new Folder(
+				folderName, user
+		);
 		return repository.save(folder);
 	}
 
@@ -25,8 +28,8 @@ public class FolderService {
 		return repository.findByName(name);
 	}
 
-	public List<Folder> getAll() {
-		return repository.findAll();
+	public List<Folder> getAll(Integer id) {
+		return repository.findAllByUserId(id);
 	}
 
 	@Transactional

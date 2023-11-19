@@ -26,7 +26,7 @@ public class User implements UserDetails {
 
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
-	private Integer id;
+	public Integer id;
 
 	private String username;
 

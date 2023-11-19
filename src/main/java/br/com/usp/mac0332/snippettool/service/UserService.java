@@ -44,4 +44,15 @@ public class UserService implements UserDetailsService {
         var user = repo.findByUsername(username);
         return new MyUserDetails(user);
     }
+
+    public void delete(User user) {
+        repo.delete(user);
+    }
+
+    public void editUserFromLogin(Login login, User user) {
+        user.setPassword(passwordEncoder.encode(login.getPassword()));
+        user.setUsername(login.getUsername());
+        user.setEmail(login.getEmail());
+        repo.save(user);
+    }
 }

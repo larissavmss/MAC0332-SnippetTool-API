@@ -1,20 +1,15 @@
 package br.com.usp.mac0332.snippettool.controller;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
+import br.com.usp.mac0332.snippettool.enums.Color;
+import br.com.usp.mac0332.snippettool.model.ColorName;
 import br.com.usp.mac0332.snippettool.model.Tag;
 import br.com.usp.mac0332.snippettool.service.TagService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Arrays;
+import java.util.List;
 
 @RestController
 @RequestMapping("tag")
@@ -32,6 +27,12 @@ public class TagController {
 	@GetMapping
 	public ResponseEntity<List<Tag>> readTags() {
 		List<Tag> response = service.readTags();
+		return ResponseEntity.ok(response);
+	}
+
+	@GetMapping("getCollorOptions")
+	public ResponseEntity getCollorOptions() {
+		var response = Arrays.stream(Color.values()).map(it -> new ColorName(it));
 		return ResponseEntity.ok(response);
 	}
 
