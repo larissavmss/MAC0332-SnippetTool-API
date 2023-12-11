@@ -3,16 +3,20 @@ package br.com.usp.mac0332.snippettool.model;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
 import java.sql.Date;
-import java.time.LocalDate;
+import java.util.Objects;
 import java.util.Set;
 
+import org.hibernate.annotations.CreationTimestamp;
+
+import br.com.usp.mac0332.snippettool.dto.snippet.SnippetCreateDto;
+import br.com.usp.mac0332.snippettool.dto.snippet.SnippetUpdateDto;
+import io.micrometer.common.util.StringUtils;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -35,6 +39,7 @@ public class Snippet {
 
 	private String content;
 
+	@CreationTimestamp
 	private Date creationDate;
 
 	@ManyToOne
@@ -44,21 +49,22 @@ public class Snippet {
 	@ManyToMany(mappedBy = "snippets")
 	private Set<Tag> tags;
 
-	public void update(Snippet updatedSnippet) {
-		if (updatedSnippet.getName() != null) {
-			this.name = updatedSnippet.getName();
-		}
-		if (updatedSnippet.getContent() != null) {
-			this.content = updatedSnippet.getContent();
-		}
-		if (updatedSnippet.getCreationDate() != null) {
-			this.creationDate = updatedSnippet.getCreationDate();
-		}
+	public Snippet(SnippetCreateDto snippetDto, Folder folder) {
+		this.name = snippetDto.name();
+		this.content = snippetDto.content();
+		this.folder = folder;
 	}
 
-	@PrePersist
-	public void onCreate() {
-		this.creationDate = Date.valueOf(LocalDate.now());
+	public void update(SnippetUpdateDto updatedSnippet, Folder folder) {
+		if (StringUtils.isNotBlank(updatedSnippet.name())) {
+			this.name = updatedSnippet.name();
+		}
+		if (StringUtils.isNotBlank(updatedSnippet.content())) {
+			this.content = updatedSnippet.content();
+		}
+		if (Objects.nonNull(folder)) {
+			this.folder = folder;
+		}
 	}
 
 }

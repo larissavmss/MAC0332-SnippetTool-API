@@ -48,4 +48,12 @@ public class FolderService {
 	public void deleteFolder(Integer snippetId, Integer userId) {
 		repository.deleteByIdAndUserId(snippetId, userId);
 	}
+	
+	public Folder findDefaultFolderByUserId(Integer userId) {
+		return repository.findByNameAndUserId("Default", userId).get();
+	}
+	
+	public Folder findByIdAndUserId(Integer id, Integer userId) {
+		return repository.findByIdAndUserId(id, userId).orElseThrow(() -> new EntityNotFoundException("Folder not fond with id: " + id));
+	}
 }

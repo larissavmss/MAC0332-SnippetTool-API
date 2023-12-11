@@ -49,5 +49,9 @@ public class TagService {
 	public void deleteTag(Integer tagId) {
 		repository.deleteById(tagId);
 	}
+	
+	public Tag findById(Integer tagId) {
+		return repository.findById(tagId).orElseThrow(() -> new EntityNotFoundException("Tag not found with the id: " + tagId));
+	}
 
 }
