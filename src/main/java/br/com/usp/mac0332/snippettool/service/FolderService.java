@@ -1,14 +1,18 @@
 package br.com.usp.mac0332.snippettool.service;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import br.com.usp.mac0332.snippettool.dto.folder.FolderCreateDto;
+import br.com.usp.mac0332.snippettool.dto.folder.FolderResponseDto;
+import br.com.usp.mac0332.snippettool.dto.folder.FolderUpdateDto;
 import br.com.usp.mac0332.snippettool.model.Folder;
 import br.com.usp.mac0332.snippettool.model.User;
 import br.com.usp.mac0332.snippettool.repository.FolderRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class FolderService {
@@ -17,30 +21,31 @@ public class FolderService {
 	FolderRepository repository;
 
 	@Transactional
-	public Folder addFolder(String folderName, User user) {
-		var folder = new Folder(
-				folderName, user
-		);
-		return repository.save(folder);
+	public FolderResponseDto addFolder(FolderCreateDto folderCreateDto, User user) {
+		Folder folder = new Folder(folderCreateDto, user);
+		FolderResponseDto folderResponseDto = new FolderResponseDto(repository.save(folder));
+		return folderResponseDto;
 	}
 
-	public Folder findByName(String name) {
-		return repository.findByName(name);
+	public FolderResponseDto findByName(String name, Integer userId) {
+		Folder folder = repository.findByNameAndUserId(name, userId).orElseThrow(() -> new EntityNotFoundException("Folder not found with name: " + name));
+		return new FolderResponseDto(folder);
 	}
 
-	public List<Folder> getAll(Integer id) {
-		return repository.findAllByUserId(id);
+	public List<FolderResponseDto> getAll(Integer id) {
+		List<Folder> folders = repository.findByUserId(id);
+		List<FolderResponseDto> foldersResponseDto = folders.stream().map(FolderResponseDto::new).toList();
+		return foldersResponseDto;
 	}
 
 	@Transactional
-	public Folder updateFolder(Integer folderId, Folder updatedFolder) {
-		Folder existingFolder = repository.findById(folderId)
-				.orElseThrow(() -> new EntityNotFoundException("Folder not found with id: " + folderId));
+	public FolderResponseDto updateFolder(Integer folderId, FolderUpdateDto updatedFolder, Integer userId) {
+		Folder existingFolder = repository.findByIdAndUserId(folderId, userId).orElseThrow(() -> new EntityNotFoundException("Folder not found with id: " + folderId));
 		existingFolder.update(updatedFolder);
-		return repository.save(existingFolder);
+		return new FolderResponseDto(repository.save(existingFolder));
 	}
 
-	public void deleteFolder(Integer snippetId) {
-		repository.deleteById(snippetId);
+	public void deleteFolder(Integer snippetId, Integer userId) {
+		repository.deleteByIdAndUserId(snippetId, userId);
 	}
 }

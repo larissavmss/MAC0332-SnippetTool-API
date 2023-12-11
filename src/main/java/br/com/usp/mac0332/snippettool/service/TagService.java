@@ -5,9 +5,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.com.usp.mac0332.snippettool.dto.TagCreateDto;
-import br.com.usp.mac0332.snippettool.dto.TagResponseDto;
-import br.com.usp.mac0332.snippettool.dto.TagUpdateDto;
+import br.com.usp.mac0332.snippettool.dto.tag.TagCreateDto;
+import br.com.usp.mac0332.snippettool.dto.tag.TagResponseDto;
+import br.com.usp.mac0332.snippettool.dto.tag.TagUpdateDto;
 import br.com.usp.mac0332.snippettool.model.Tag;
 import br.com.usp.mac0332.snippettool.repository.TagRepository;
 import jakarta.persistence.EntityNotFoundException;

@@ -1,4 +1,4 @@
-package br.com.usp.mac0332.snippettool.dto;
+package br.com.usp.mac0332.snippettool.dto.tag;
 
 import br.com.usp.mac0332.snippettool.model.Tag;
 

@@ -1,15 +1,24 @@
 package br.com.usp.mac0332.snippettool.model;
 
-import jakarta.persistence.*;
+import static jakarta.persistence.GenerationType.IDENTITY;
+
+import java.sql.Date;
+
+import org.hibernate.annotations.CreationTimestamp;
+
+import br.com.usp.mac0332.snippettool.dto.folder.FolderCreateDto;
+import br.com.usp.mac0332.snippettool.dto.folder.FolderUpdateDto;
+import io.micrometer.common.util.StringUtils;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.sql.Date;
-import java.time.LocalDate;
-
-import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Table(name = "folder", schema = "public")
@@ -25,26 +34,21 @@ public class Folder {
 
 	private String name;
 
+	@CreationTimestamp
 	private Date creationDate;
 
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private User user;
 
-	public Folder (String folderName, User user) {
-		this.creationDate = Date.valueOf(LocalDate.now());
-		this.name = folderName;
+	public Folder (FolderCreateDto folderCreateDto, User user) {
+		this.name = folderCreateDto.name();
 		this.user = user;
 	}
 
-	@PrePersist
-	public void onCreate() {
-		this.creationDate = Date.valueOf(LocalDate.now());
-	}
-
-	public void update(Folder updatedFolder) {
-		if (updatedFolder.getName() != null) {
-			this.name = updatedFolder.getName();
+	public void update(FolderUpdateDto updatedFolder) {
+		if (StringUtils.isNotBlank(updatedFolder.name())) {
+			this.name = updatedFolder.name();
 		}
 	}
 }

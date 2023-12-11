@@ -1,6 +1,7 @@
 package br.com.usp.mac0332.snippettool.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -8,8 +9,12 @@ import br.com.usp.mac0332.snippettool.model.Folder;
 
 public interface FolderRepository extends JpaRepository<Folder, Integer> {
 
-    Folder findByName(String name);
+    Optional<Folder> findByNameAndUserId(String name, Integer userId);
 
-    List<Folder> findAllByUserId(Integer id);
+    List<Folder> findByUserId(Integer id);
+    
+    Optional<Folder> findByIdAndUserId(Integer id, Integer userId);
+    
+    void deleteByIdAndUserId(Integer id, Integer userId);
     
 }

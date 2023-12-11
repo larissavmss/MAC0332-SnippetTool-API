@@ -4,8 +4,8 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 
 import java.util.Set;
 
-import br.com.usp.mac0332.snippettool.dto.TagCreateDto;
-import br.com.usp.mac0332.snippettool.dto.TagUpdateDto;
+import br.com.usp.mac0332.snippettool.dto.tag.TagCreateDto;
+import br.com.usp.mac0332.snippettool.dto.tag.TagUpdateDto;
 import br.com.usp.mac0332.snippettool.enums.Color;
 import io.micrometer.common.util.StringUtils;
 import jakarta.persistence.Entity;

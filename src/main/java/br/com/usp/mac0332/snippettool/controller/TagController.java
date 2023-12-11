@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.usp.mac0332.snippettool.dto.TagColorResponseDto;
-import br.com.usp.mac0332.snippettool.dto.TagCreateDto;
-import br.com.usp.mac0332.snippettool.dto.TagResponseDto;
-import br.com.usp.mac0332.snippettool.dto.TagUpdateDto;
+import br.com.usp.mac0332.snippettool.dto.tag.TagColorResponseDto;
+import br.com.usp.mac0332.snippettool.dto.tag.TagCreateDto;
+import br.com.usp.mac0332.snippettool.dto.tag.TagResponseDto;
+import br.com.usp.mac0332.snippettool.dto.tag.TagUpdateDto;
 import br.com.usp.mac0332.snippettool.enums.Color;
 import br.com.usp.mac0332.snippettool.service.TagService;
 
