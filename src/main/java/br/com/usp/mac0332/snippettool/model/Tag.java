@@ -4,7 +4,10 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 
 import java.util.Set;
 
+import br.com.usp.mac0332.snippettool.dto.TagCreateDto;
+import br.com.usp.mac0332.snippettool.dto.TagUpdateDto;
 import br.com.usp.mac0332.snippettool.enums.Color;
+import io.micrometer.common.util.StringUtils;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -45,13 +48,19 @@ public class Tag {
 	@JoinTable(name = "tag_snippet", joinColumns = @JoinColumn(name = "tag_id"), inverseJoinColumns = @JoinColumn(name = "snippet_id"))
 	private Set<Snippet> snippets;
 
-	public void update(Tag updatedTag) {
-		if (updatedTag.name != null) {
-			this.setName(updatedTag.name);
+	public Tag(TagCreateDto tagDto) {
+		this.name = tagDto.name();
+		this.color = Color.valueOf(tagDto.color());
+	}
+
+	public Tag update(TagUpdateDto updatedTag) {
+		if (StringUtils.isNotBlank(updatedTag.name())) {
+			this.setName(updatedTag.name());
 		}
-		if (updatedTag.color != null) {
-			this.setColor(updatedTag.getColor());
+		if (StringUtils.isNotBlank(updatedTag.color())) {
+			this.setColor(Color.valueOf(updatedTag.color()));
 		}
+		return this;
 	}
 
 }

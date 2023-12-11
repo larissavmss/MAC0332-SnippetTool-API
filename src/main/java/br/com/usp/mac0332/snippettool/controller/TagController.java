@@ -1,15 +1,25 @@
 package br.com.usp.mac0332.snippettool.controller;
 
-import br.com.usp.mac0332.snippettool.enums.Color;
-import br.com.usp.mac0332.snippettool.model.ColorName;
-import br.com.usp.mac0332.snippettool.model.Tag;
-import br.com.usp.mac0332.snippettool.service.TagService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
 import java.util.Arrays;
 import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import br.com.usp.mac0332.snippettool.dto.TagColorResponseDto;
+import br.com.usp.mac0332.snippettool.dto.TagCreateDto;
+import br.com.usp.mac0332.snippettool.dto.TagResponseDto;
+import br.com.usp.mac0332.snippettool.dto.TagUpdateDto;
+import br.com.usp.mac0332.snippettool.enums.Color;
+import br.com.usp.mac0332.snippettool.service.TagService;
 
 @RestController
 @RequestMapping("tag")
@@ -19,32 +29,32 @@ public class TagController {
 	private TagService service;
 
 	@PostMapping
-	public ResponseEntity<Tag> createTag(Tag tag) {
-		Tag response = service.createTag(tag);
+	public ResponseEntity<TagResponseDto> createTag(TagCreateDto tag) {
+		TagResponseDto response = service.createTag(tag);
 		return ResponseEntity.ok(response);
 	}
 
 	@GetMapping
-	public ResponseEntity<List<Tag>> readTags() {
-		List<Tag> response = service.readTags();
+	public ResponseEntity<List<TagResponseDto>> readTags() {
+		List<TagResponseDto> response = service.readTags();
 		return ResponseEntity.ok(response);
 	}
 
-	@GetMapping("getCollorOptions")
-	public ResponseEntity getCollorOptions() {
-		var response = Arrays.stream(Color.values()).map(it -> new ColorName(it));
+	@GetMapping("/getCollorOptions")
+	public ResponseEntity<List<TagColorResponseDto>> getCollorOptions() {
+		List<TagColorResponseDto> response = Arrays.asList(Color.values()).stream().map(color -> new TagColorResponseDto(color.toString())).toList();
 		return ResponseEntity.ok(response);
 	}
 
 	@GetMapping("/{tagId}")
-	public ResponseEntity<Tag> readTag(@PathVariable Integer tagId) {
-		Tag response = service.readTag(tagId);
+	public ResponseEntity<TagResponseDto> readTag(@PathVariable Integer tagId) {
+		TagResponseDto response = service.readTag(tagId);
 		return ResponseEntity.ok(response);
 	}
 
 	@PutMapping("/{tagId}")
-	public ResponseEntity<Tag> updatedTag(@PathVariable Integer tagId, @RequestBody Tag updatedTag) {
-		Tag response = service.updateTag(tagId, updatedTag);
+	public ResponseEntity<TagResponseDto> updatedTag(@PathVariable Integer tagId, @RequestBody TagUpdateDto updatedTag) {
+		TagResponseDto response = service.updateTag(tagId, updatedTag);
 		return ResponseEntity.ok(response);
 	}
 
