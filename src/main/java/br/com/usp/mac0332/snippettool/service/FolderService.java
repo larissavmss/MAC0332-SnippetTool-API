@@ -53,6 +53,11 @@ public class FolderService {
 		return repository.findByNameAndUserId("Default", userId).get();
 	}
 	
+	
+	public FolderResponseDto findByIdAndUserIdToDto(Integer folderId, Integer userId) {
+		return new FolderResponseDto(this.findByIdAndUserId(folderId, userId));
+	}
+	
 	public Folder findByIdAndUserId(Integer id, Integer userId) {
 		return repository.findByIdAndUserId(id, userId).orElseThrow(() -> new EntityNotFoundException("Folder not fond with id: " + id));
 	}

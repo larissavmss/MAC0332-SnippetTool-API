@@ -51,6 +51,12 @@ public class FolderController {
 		FolderResponseDto response = folderService.findByName(name, ((MyUserDetails) userDetails).user.id);
 		return ResponseEntity.ok(response);
 	}
+	
+	@GetMapping("/{folderId}")
+	public ResponseEntity<FolderResponseDto> findById(@PathVariable Integer folderId, @AuthenticationPrincipal UserDetails userDetails) {
+		FolderResponseDto response = folderService.findByIdAndUserIdToDto(folderId, ((MyUserDetails) userDetails).user.id);
+		return ResponseEntity.ok(response);
+	}
 
 	@PutMapping("/{folderId}")
 	public ResponseEntity<FolderResponseDto> updateFolder(@PathVariable Integer folderId, @RequestBody FolderUpdateDto updatedFolder, @AuthenticationPrincipal UserDetails userDetails) {
