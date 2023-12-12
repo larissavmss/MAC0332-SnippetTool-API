@@ -13,13 +13,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.usp.mac0332.snippettool.dto.folder.FolderCreateDto;
 import br.com.usp.mac0332.snippettool.dto.folder.FolderResponseDto;
 import br.com.usp.mac0332.snippettool.dto.folder.FolderUpdateDto;
+import br.com.usp.mac0332.snippettool.dto.snippet.SnippetResponseDto;
 import br.com.usp.mac0332.snippettool.service.FolderService;
 import br.com.usp.mac0332.snippettool.service.MyUserDetails;
+import br.com.usp.mac0332.snippettool.service.SnippetService;
 
 @RestController
 @RequestMapping("folder")
@@ -27,6 +30,9 @@ public class FolderController {
 
 	@Autowired
 	FolderService folderService;
+	
+	@Autowired
+	SnippetService snippetService;
 
 	@PostMapping
 	public ResponseEntity<FolderResponseDto> addFolder(@RequestBody FolderCreateDto folderCreateDto, @AuthenticationPrincipal UserDetails userDetails) {
@@ -56,6 +62,12 @@ public class FolderController {
 	public ResponseEntity<Void> deleteFolder(@PathVariable Integer folderId, @AuthenticationPrincipal UserDetails userDetails) {
 		folderService.deleteFolder(folderId, ((MyUserDetails) userDetails).user.id);
 		return ResponseEntity.noContent().build();
+	}
+	
+	@GetMapping("/{folderId}/snippets")
+	public ResponseEntity<List<SnippetResponseDto>> getSnippetsByFiltro(@PathVariable Integer folderId, @RequestParam Integer tagId, @RequestParam String name, @AuthenticationPrincipal UserDetails userDetails){
+		List<SnippetResponseDto> response = snippetService.findByFiltro(tagId, name, folderId, ((MyUserDetails) userDetails).user.id);
+		return ResponseEntity.ok(response);
 	}
 
 }

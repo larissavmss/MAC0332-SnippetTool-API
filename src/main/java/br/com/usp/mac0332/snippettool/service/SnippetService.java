@@ -82,7 +82,13 @@ public class SnippetService {
 		snippet.setTags(tags);
 		SnippetResponseDto snippetResponseDto = this.createSnippetResponseDto(repository.save(snippet));
 		return snippetResponseDto;
-		
+	}
+	
+	public List<SnippetResponseDto> findByFiltro(Integer tagId, String name, Integer folderId, Integer userId){
+		folderService.findByIdAndUserId(folderId, userId);
+		List<Snippet> snippets = repository.findByTag_IdOrNameAndFolder_Id(tagId, name, folderId);
+		List<SnippetResponseDto> snippetsResponseDto = snippets.stream().map(this::createSnippetResponseDto).toList();
+		return snippetsResponseDto;
 	}
 	
 	private SnippetResponseDto createSnippetResponseDto(Snippet snippet) {
