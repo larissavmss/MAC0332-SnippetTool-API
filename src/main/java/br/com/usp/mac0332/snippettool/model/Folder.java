@@ -9,6 +9,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import br.com.usp.mac0332.snippettool.dto.folder.FolderCreateDto;
 import br.com.usp.mac0332.snippettool.dto.folder.FolderUpdateDto;
 import io.micrometer.common.util.StringUtils;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
