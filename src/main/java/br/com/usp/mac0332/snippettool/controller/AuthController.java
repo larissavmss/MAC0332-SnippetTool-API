@@ -1,6 +1,7 @@
 package br.com.usp.mac0332.snippettool.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.usp.mac0332.snippettool.dto.auth.AuthLoginDto;
 import br.com.usp.mac0332.snippettool.dto.auth.AuthRegisterDto;
+import br.com.usp.mac0332.snippettool.dto.user.UserResponseDto;
 import br.com.usp.mac0332.snippettool.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -47,8 +49,9 @@ public class AuthController {
 	}
 
 	@PostMapping("/register")
-	public void register(@RequestBody AuthRegisterDto registerDto) {
-		userService.create(registerDto);
+	public ResponseEntity<UserResponseDto> register(@RequestBody AuthRegisterDto registerDto) {
+		UserResponseDto response = userService.create(registerDto);
+		return ResponseEntity.ok(response);
 	}
 
 }
