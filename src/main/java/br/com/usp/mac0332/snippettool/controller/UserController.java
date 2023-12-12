@@ -1,42 +1,44 @@
 package br.com.usp.mac0332.snippettool.controller;
 
-import br.com.usp.mac0332.snippettool.model.User;
-import br.com.usp.mac0332.snippettool.service.Login;
-import br.com.usp.mac0332.snippettool.service.MyUserDetails;
-import br.com.usp.mac0332.snippettool.service.UserService;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import br.com.usp.mac0332.snippettool.dto.user.UserResponseDto;
+import br.com.usp.mac0332.snippettool.dto.user.UserUpdateDto;
+import br.com.usp.mac0332.snippettool.service.MyUserDetails;
+import br.com.usp.mac0332.snippettool.service.UserService;
 
 @RestController
 @RequestMapping("user")
 public class UserController {
-    @Autowired
-    UserService userService;
 
-    @GetMapping("/findByName")
-    public User findByName(@RequestParam("name") String name){
-        return userService.findByUsername(name);
-    }
+	@Autowired
+	UserService userService;
 
-    @GetMapping("/getAll")
-    public List<User> getAll(){
+	@GetMapping
+	public ResponseEntity<List<UserResponseDto>> getAll() {
+		List<UserResponseDto> response = userService.findAll();
+		return ResponseEntity.ok(response);
+	}
 
-        return userService.findAll();
-    }
+	@DeleteMapping
+	public void deleteThisUser(@AuthenticationPrincipal UserDetails userDetails) {
+		userService.delete(((MyUserDetails) userDetails).user);
+	}
 
-    @DeleteMapping
-    public void deleteThisUser(@AuthenticationPrincipal UserDetails userDetails){
-        userService.delete(((MyUserDetails) userDetails).user);
-    }
-
-    @PutMapping
-    public void editUser(@RequestBody Login login, @AuthenticationPrincipal UserDetails userDetails){
-        userService.editUserFromLogin(login, ((MyUserDetails) userDetails).user);
-    }
-
+	@PutMapping
+	public void editUser(@RequestBody UserUpdateDto updateDto, @AuthenticationPrincipal UserDetails userDetails) {
+		userService.update(updateDto, ((MyUserDetails) userDetails).user);
+	}
 
 }
