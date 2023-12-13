@@ -20,6 +20,7 @@ import br.com.usp.mac0332.snippettool.dto.tag.TagResponseDto;
 import br.com.usp.mac0332.snippettool.dto.tag.TagUpdateDto;
 import br.com.usp.mac0332.snippettool.enums.Color;
 import br.com.usp.mac0332.snippettool.service.TagService;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("tag")
@@ -29,7 +30,7 @@ public class TagController {
 	private TagService service;
 
 	@PostMapping
-	public ResponseEntity<TagResponseDto> createTag(TagCreateDto tag) {
+	public ResponseEntity<TagResponseDto> createTag(@Valid @RequestBody TagCreateDto tag) {
 		TagResponseDto response = service.createTag(tag);
 		return ResponseEntity.ok(response);
 	}
@@ -53,7 +54,7 @@ public class TagController {
 	}
 
 	@PutMapping("/{tagId}")
-	public ResponseEntity<TagResponseDto> updatedTag(@PathVariable Integer tagId, @RequestBody TagUpdateDto updatedTag) {
+	public ResponseEntity<TagResponseDto> updatedTag(@PathVariable Integer tagId, @Valid @RequestBody TagUpdateDto updatedTag) {
 		TagResponseDto response = service.updateTag(tagId, updatedTag);
 		return ResponseEntity.ok(response);
 	}

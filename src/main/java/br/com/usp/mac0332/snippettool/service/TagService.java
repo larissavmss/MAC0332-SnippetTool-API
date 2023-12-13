@@ -46,6 +46,7 @@ public class TagService {
 		return tagResponseDto;
 	}
 
+	@Transactional
 	public void deleteTag(Integer tagId) {
 		repository.deleteById(tagId);
 	}

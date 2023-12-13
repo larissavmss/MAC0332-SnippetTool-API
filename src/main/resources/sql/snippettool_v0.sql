@@ -1,5 +1,3 @@
-CREATE TYPE COLOR AS ENUM('RED', 'YELLOW', 'BLUE', 'GREEN', 'ORANGE', 'PURPLE');
-
 CREATE TABLE public."user"(
 	"id" SERIAL PRIMARY KEY,
 	"username" VARCHAR(40) NOT NULL UNIQUE, 
@@ -22,7 +20,7 @@ CREATE TABLE public."folder"(
 CREATE TABLE public."tag"(
 	"id" SERIAL PRIMARY KEY,
 	"name" VARCHAR(60) NOT NULL,
-	"color" COLOR NOT NULL,
+	"color" VARCHAR(10) NOT NULL,
 	"user_id" INTEGER,
 	CONSTRAINT "FK_user_id" FOREIGN KEY("user_id") 
 		REFERENCES public."user"("id")
