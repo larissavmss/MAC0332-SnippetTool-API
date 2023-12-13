@@ -46,9 +46,9 @@ public class FolderController {
 		return ResponseEntity.ok(response);
 	}
 
-	@GetMapping("/{name}")
-	public ResponseEntity<FolderResponseDto> findByName(@PathVariable String name, @AuthenticationPrincipal UserDetails userDetails) {
-		FolderResponseDto response = folderService.findByName(name, ((MyUserDetails) userDetails).user.id);
+	@GetMapping("/filtro/{name}")
+	public ResponseEntity<List<FolderResponseDto>> findByName(@PathVariable String name, @AuthenticationPrincipal UserDetails userDetails) {
+		List<FolderResponseDto> response = folderService.findByName(name, ((MyUserDetails) userDetails).user.id);
 		return ResponseEntity.ok(response);
 	}
 	

@@ -9,8 +9,10 @@ import br.com.usp.mac0332.snippettool.model.Folder;
 
 public interface FolderRepository extends JpaRepository<Folder, Integer> {
 
-    Optional<Folder> findByNameAndUserId(String name, Integer userId);
+    List<Folder> findByNameContainingAndUserId(String name, Integer userId);
 
+    Optional<Folder> findByNameAndUserId(String name, Integer userId);
+    
     List<Folder> findByUserId(Integer id);
     
     Optional<Folder> findByIdAndUserId(Integer id, Integer userId);

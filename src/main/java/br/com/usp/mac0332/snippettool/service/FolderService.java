@@ -27,9 +27,10 @@ public class FolderService {
 		return folderResponseDto;
 	}
 
-	public FolderResponseDto findByName(String name, Integer userId) {
-		Folder folder = repository.findByNameAndUserId(name, userId).orElseThrow(() -> new EntityNotFoundException("Folder not found with name: " + name));
-		return new FolderResponseDto(folder);
+	public List<FolderResponseDto> findByName(String name, Integer userId) {
+		List<Folder> folders = repository.findByNameContainingAndUserId(name, userId);
+		List<FolderResponseDto> foldersResponseDto = folders.stream().map(FolderResponseDto::new).toList();
+		return foldersResponseDto;
 	}
 
 	public List<FolderResponseDto> getAll(Integer id) {
@@ -45,6 +46,7 @@ public class FolderService {
 		return new FolderResponseDto(repository.save(existingFolder));
 	}
 
+	@Transactional
 	public void deleteFolder(Integer snippetId, Integer userId) {
 		repository.deleteByIdAndUserId(snippetId, userId);
 	}
@@ -52,7 +54,6 @@ public class FolderService {
 	public Folder findDefaultFolderByUserId(Integer userId) {
 		return repository.findByNameAndUserId("Default", userId).get();
 	}
-	
 	
 	public FolderResponseDto findByIdAndUserIdToDto(Integer folderId, Integer userId) {
 		return new FolderResponseDto(this.findByIdAndUserId(folderId, userId));
