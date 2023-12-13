@@ -50,9 +50,10 @@ public class Tag {
 	@JoinTable(name = "tag_snippet", joinColumns = @JoinColumn(name = "tag_id"), inverseJoinColumns = @JoinColumn(name = "snippet_id"))
 	private Set<Snippet> snippets;
 
-	public Tag(TagCreateDto tagDto) {
+	public Tag(TagCreateDto tagDto, User user) {
 		this.name = tagDto.name();
 		this.color = Color.valueOf(tagDto.color());
+		this.user = user;
 	}
 	
 	public void addSnippet(Snippet snippet) {

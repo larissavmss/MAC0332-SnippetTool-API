@@ -9,6 +9,7 @@ import br.com.usp.mac0332.snippettool.dto.tag.TagCreateDto;
 import br.com.usp.mac0332.snippettool.dto.tag.TagResponseDto;
 import br.com.usp.mac0332.snippettool.dto.tag.TagUpdateDto;
 import br.com.usp.mac0332.snippettool.model.Tag;
+import br.com.usp.mac0332.snippettool.model.User;
 import br.com.usp.mac0332.snippettool.repository.TagRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -20,35 +21,35 @@ public class TagService {
 	private TagRepository repository;
 
 	@Transactional
-	public TagResponseDto createTag(TagCreateDto tagCreateDto) {
-		Tag tag = new Tag(tagCreateDto);
+	public TagResponseDto createTag(TagCreateDto tagCreateDto, User user) {
+		Tag tag = new Tag(tagCreateDto, user);
 		TagResponseDto tagResponseDto = new TagResponseDto(repository.save(tag));
 		return tagResponseDto;
 	}
 
-	public List<TagResponseDto> readTags() {
-		List<Tag> tags = repository.findAll();
+	public List<TagResponseDto> readTags(Integer userId) {
+		List<Tag> tags = repository.findByUser_Id(userId);
 		List<TagResponseDto> tagsResponseDto = tags.stream().map(TagResponseDto::new).toList();
 		return tagsResponseDto;
 	}
 
-	public TagResponseDto readTag(Integer tagId) {
-		Tag tag = repository.findById(tagId).orElseThrow(() -> new EntityNotFoundException("Tag not found with the id: " + tagId));
+	public TagResponseDto readTag(Integer tagId, Integer userId) {
+		Tag tag = repository.findByIdAndUser_Id(tagId, userId).orElseThrow(() -> new EntityNotFoundException("Tag not found with the id: " + tagId));
 		TagResponseDto tagResponseDto = new TagResponseDto(tag);
 		return tagResponseDto;
 	}
 
 	@Transactional
-	public TagResponseDto updateTag(Integer tagId, TagUpdateDto updatedTag) {
-		Tag existingTag = repository.findById(tagId).orElseThrow(() -> new EntityNotFoundException("Tag not found with the id: " + tagId));
+	public TagResponseDto updateTag(Integer tagId, TagUpdateDto updatedTag, Integer userId) {
+		Tag existingTag = repository.findByIdAndUser_Id(tagId, userId).orElseThrow(() -> new EntityNotFoundException("Tag not found with the id: " + tagId));
 		existingTag.update(updatedTag);
 		TagResponseDto tagResponseDto = new TagResponseDto(repository.save(existingTag));
 		return tagResponseDto;
 	}
 
 	@Transactional
-	public void deleteTag(Integer tagId) {
-		repository.deleteById(tagId);
+	public void deleteTag(Integer tagId, Integer userId) {
+		repository.deleteByIdAndUser_Id(tagId, userId);
 	}
 	
 	public Tag findById(Integer tagId) {

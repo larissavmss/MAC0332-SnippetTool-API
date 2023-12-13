@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +21,7 @@ import br.com.usp.mac0332.snippettool.dto.tag.TagCreateDto;
 import br.com.usp.mac0332.snippettool.dto.tag.TagResponseDto;
 import br.com.usp.mac0332.snippettool.dto.tag.TagUpdateDto;
 import br.com.usp.mac0332.snippettool.enums.Color;
+import br.com.usp.mac0332.snippettool.service.MyUserDetails;
 import br.com.usp.mac0332.snippettool.service.TagService;
 import jakarta.validation.Valid;
 
@@ -30,14 +33,14 @@ public class TagController {
 	private TagService service;
 
 	@PostMapping
-	public ResponseEntity<TagResponseDto> createTag(@Valid @RequestBody TagCreateDto tag) {
-		TagResponseDto response = service.createTag(tag);
+	public ResponseEntity<TagResponseDto> createTag(@Valid @RequestBody TagCreateDto tag, @AuthenticationPrincipal UserDetails userDetails) {
+		TagResponseDto response = service.createTag(tag, ((MyUserDetails) userDetails).user);
 		return ResponseEntity.ok(response);
 	}
 
 	@GetMapping
-	public ResponseEntity<List<TagResponseDto>> readTags() {
-		List<TagResponseDto> response = service.readTags();
+	public ResponseEntity<List<TagResponseDto>> readTags(@AuthenticationPrincipal UserDetails userDetails) {
+		List<TagResponseDto> response = service.readTags(((MyUserDetails) userDetails).user.id);
 		return ResponseEntity.ok(response);
 	}
 
@@ -48,20 +51,20 @@ public class TagController {
 	}
 
 	@GetMapping("/{tagId}")
-	public ResponseEntity<TagResponseDto> readTag(@PathVariable Integer tagId) {
-		TagResponseDto response = service.readTag(tagId);
+	public ResponseEntity<TagResponseDto> readTag(@PathVariable Integer tagId, @AuthenticationPrincipal UserDetails userDetails) {
+		TagResponseDto response = service.readTag(tagId, ((MyUserDetails) userDetails).user.id);
 		return ResponseEntity.ok(response);
 	}
 
 	@PutMapping("/{tagId}")
-	public ResponseEntity<TagResponseDto> updatedTag(@PathVariable Integer tagId, @Valid @RequestBody TagUpdateDto updatedTag) {
-		TagResponseDto response = service.updateTag(tagId, updatedTag);
+	public ResponseEntity<TagResponseDto> updatedTag(@PathVariable Integer tagId, @Valid @RequestBody TagUpdateDto updatedTag, @AuthenticationPrincipal UserDetails userDetails) {
+		TagResponseDto response = service.updateTag(tagId, updatedTag, ((MyUserDetails) userDetails).user.id);
 		return ResponseEntity.ok(response);
 	}
 
 	@DeleteMapping("/{tagId}")
-	public ResponseEntity<Void> deleteTag(@PathVariable Integer tagId) {
-		service.deleteTag(tagId);
+	public ResponseEntity<Void> deleteTag(@PathVariable Integer tagId, @AuthenticationPrincipal UserDetails userDetails) {
+		service.deleteTag(tagId, ((MyUserDetails) userDetails).user.id);
 		return ResponseEntity.noContent().build();
 	}
 }
