@@ -34,24 +34,26 @@ public class SnippetService {
 	public SnippetResponseDto createSnippet(SnippetCreateDto snippetCreateDto, Integer userId) {
 		Folder folder = folderService.findDefaultFolderByUserId(userId);
 		Snippet snippet = new Snippet(snippetCreateDto, folder);
-		return new SnippetResponseDto(repository.save(snippet), null);
+		Snippet snippetSaved = repository.save(snippet);
+		SnippetResponseDto response = this.createSnippetResponseDto(snippetSaved);
+		return response;
 	}
 
 	public List<SnippetResponseDto> readSnippets(Integer userId) {
-		List<Snippet> snippets = repository.findByUserId(userId);
+		List<Snippet> snippets = repository.findByFolder_User_Id(userId);
 		List<SnippetResponseDto> snippetsResponseDto = snippets.stream().map(this::createSnippetResponseDto).toList();
 		return snippetsResponseDto;
 	}
 
 	public SnippetResponseDto readSnippet(Integer snippetId, Integer userId) {
-		Snippet snippet = repository.findByIdAndUserId(snippetId, userId).orElseThrow(() -> new EntityNotFoundException("Snippet not found with id: " + snippetId));
+		Snippet snippet = repository.findByIdAndFolder_User_Id(snippetId, userId).orElseThrow(() -> new EntityNotFoundException("Snippet not found with id: " + snippetId));
 		SnippetResponseDto snippetResponseDto = this.createSnippetResponseDto(snippet);
 		return snippetResponseDto;
 	}
 
 	@Transactional
 	public SnippetResponseDto updateSnippet(Integer snippetId, SnippetUpdateDto updatedSnippet, Integer userId) {
-		Snippet existingSnippet = repository.findByIdAndUserId(snippetId, userId).orElseThrow(() -> new EntityNotFoundException("Snippet not found with id: " + snippetId));
+		Snippet existingSnippet = repository.findByIdAndFolder_User_Id(snippetId, userId).orElseThrow(() -> new EntityNotFoundException("Snippet not found with id: " + snippetId));
 		Folder folder = null;
 		if(Objects.nonNull(updatedSnippet.folderId())) {			
 			folder = folderService.findByIdAndUserId(updatedSnippet.folderId(), userId);
@@ -62,24 +64,21 @@ public class SnippetService {
 	}
 
 	public void deleteSnippet(Integer snippetId, Integer userId) {
-		repository.deleteByIdAndUserId(snippetId, userId);
+		repository.deleteByIdAndFolder_User_Id(snippetId, userId);
 	}
 	
 	public SnippetResponseDto addTagToSnippet(Integer snippetId, Integer tagId, Integer userId) {
-		Snippet snippet = repository.findByIdAndUserId(snippetId, userId).orElseThrow(() -> new EntityNotFoundException("Snippet not found with id: " + snippetId));
-		Set<Tag> tags = snippet.getTags();
+		Snippet snippet = repository.findByIdAndFolder_User_Id(snippetId, userId).orElseThrow(() -> new EntityNotFoundException("Snippet not found with id: " + snippetId));
 		Tag tag = tagService.findById(tagId);
-		tags.add(tag);
-		snippet.setTags(tags);
+		snippet.addTag(tag);
 		SnippetResponseDto snippetResponseDto = this.createSnippetResponseDto(repository.save(snippet));
 		return snippetResponseDto;
 	}
 	
 	public SnippetResponseDto removeTagFromSnippet(Integer snippetId, Integer tagId, Integer userId) {
-		Snippet snippet = repository.findByIdAndUserId(snippetId, userId).orElseThrow(() -> new EntityNotFoundException("Snippet not found with id: " + snippetId));
-		Set<Tag> tags = snippet.getTags();
-		tags.removeIf(tag -> tag.getId().equals(tagId));
-		snippet.setTags(tags);
+		Snippet snippet = repository.findByIdAndFolder_User_Id(snippetId, userId).orElseThrow(() -> new EntityNotFoundException("Snippet not found with id: " + snippetId));
+		Tag tag = tagService.findById(tagId);
+		snippet.removeTag(tag);
 		SnippetResponseDto snippetResponseDto = this.createSnippetResponseDto(repository.save(snippet));
 		return snippetResponseDto;
 	}
@@ -89,6 +88,12 @@ public class SnippetService {
 		List<Snippet> snippets = repository.findByTag_IdOrNameAndFolder_Id(tagId, name, folderId);
 		List<SnippetResponseDto> snippetsResponseDto = snippets.stream().map(this::createSnippetResponseDto).toList();
 		return snippetsResponseDto;
+	}
+	
+	public List<TagResponseDto> findTags(Integer snippetId, Integer userId){
+		Snippet snippet = repository.findByIdAndFolder_User_Id(snippetId, userId).orElseThrow(() -> new EntityNotFoundException("Snippet not found with id: " + snippetId));
+		List<TagResponseDto> tagsResponseDto = snippet.getTags().stream().map(TagResponseDto::new).toList();
+		return tagsResponseDto;
 	}
 	
 	private SnippetResponseDto createSnippetResponseDto(Snippet snippet) {

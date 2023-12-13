@@ -19,8 +19,10 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.usp.mac0332.snippettool.dto.snippet.SnippetCreateDto;
 import br.com.usp.mac0332.snippettool.dto.snippet.SnippetResponseDto;
 import br.com.usp.mac0332.snippettool.dto.snippet.SnippetUpdateDto;
+import br.com.usp.mac0332.snippettool.dto.tag.TagResponseDto;
 import br.com.usp.mac0332.snippettool.service.MyUserDetails;
 import br.com.usp.mac0332.snippettool.service.SnippetService;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("snippet")
@@ -30,7 +32,7 @@ public class SnippetController {
 	private SnippetService service;
 
 	@PostMapping
-	public ResponseEntity<SnippetResponseDto> createSnippet(SnippetCreateDto snippetCreateDto, @AuthenticationPrincipal UserDetails userDetails) {
+	public ResponseEntity<SnippetResponseDto> createSnippet(@Valid @RequestBody SnippetCreateDto snippetCreateDto, @AuthenticationPrincipal UserDetails userDetails) {
 		SnippetResponseDto response = service.createSnippet(snippetCreateDto, ((MyUserDetails) userDetails).user.id);
 		return ResponseEntity.ok(response);
 	}
@@ -44,6 +46,12 @@ public class SnippetController {
 	@GetMapping("/{snippetId}")
 	public ResponseEntity<SnippetResponseDto> readSnippet(@PathVariable Integer snippetId, @AuthenticationPrincipal UserDetails userDetails) {
 		SnippetResponseDto response = service.readSnippet(snippetId, ((MyUserDetails) userDetails).user.id);
+		return ResponseEntity.ok(response);
+	}
+	
+	@GetMapping("/{snippetId}/tags")
+	public ResponseEntity<List<TagResponseDto>> readTags(@PathVariable Integer snippetId, @AuthenticationPrincipal UserDetails userDetails){
+		List<TagResponseDto> response = service.findTags(snippetId, ((MyUserDetails) userDetails).user.id);
 		return ResponseEntity.ok(response);
 	}
 
