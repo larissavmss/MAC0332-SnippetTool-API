@@ -23,6 +23,7 @@ import br.com.usp.mac0332.snippettool.dto.snippet.SnippetResponseDto;
 import br.com.usp.mac0332.snippettool.service.FolderService;
 import br.com.usp.mac0332.snippettool.service.MyUserDetails;
 import br.com.usp.mac0332.snippettool.service.SnippetService;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("folder")
@@ -35,7 +36,7 @@ public class FolderController {
 	SnippetService snippetService;
 
 	@PostMapping
-	public ResponseEntity<FolderResponseDto> addFolder(@RequestBody FolderCreateDto folderCreateDto, @AuthenticationPrincipal UserDetails userDetails) {
+	public ResponseEntity<FolderResponseDto> addFolder(@Valid @RequestBody FolderCreateDto folderCreateDto, @AuthenticationPrincipal UserDetails userDetails) {
 		FolderResponseDto response = folderService.addFolder(folderCreateDto, ((MyUserDetails) userDetails).user);
 		return ResponseEntity.ok(response);
 	}
@@ -59,7 +60,7 @@ public class FolderController {
 	}
 
 	@PutMapping("/{folderId}")
-	public ResponseEntity<FolderResponseDto> updateFolder(@PathVariable Integer folderId, @RequestBody FolderUpdateDto updatedFolder, @AuthenticationPrincipal UserDetails userDetails) {
+	public ResponseEntity<FolderResponseDto> updateFolder(@PathVariable Integer folderId, @Valid @RequestBody FolderUpdateDto updatedFolder, @AuthenticationPrincipal UserDetails userDetails) {
 		FolderResponseDto response = folderService.updateFolder(folderId, updatedFolder, ((MyUserDetails) userDetails).user.id);
 		return ResponseEntity.ok(response);
 	}
