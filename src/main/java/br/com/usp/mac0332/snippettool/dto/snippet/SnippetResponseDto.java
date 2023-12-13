@@ -6,9 +6,16 @@ import java.util.List;
 import br.com.usp.mac0332.snippettool.dto.tag.TagResponseDto;
 import br.com.usp.mac0332.snippettool.model.Snippet;
 
-public record SnippetResponseDto(Integer id, String name, String content, List<TagResponseDto> tags, Date creationDate) {
+public record SnippetResponseDto(Integer id, String name, String content, List<TagResponseDto> tags, Date creationDate, Integer folderId) {
 
 	public SnippetResponseDto(Snippet snippet, List<TagResponseDto> tags) {
-		this(snippet.getId(), snippet.getName(), snippet.getContent(), tags, snippet.getCreationDate());
+		this(
+			snippet.getId(),
+			snippet.getName(), 
+			snippet.getContent(), 
+			tags, 
+			snippet.getCreationDate(),
+			snippet.getFolder().getId()
+		);
 	}
 }
