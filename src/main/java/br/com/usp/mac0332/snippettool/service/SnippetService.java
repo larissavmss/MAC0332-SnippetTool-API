@@ -32,7 +32,7 @@ public class SnippetService {
 
 	@Transactional
 	public SnippetResponseDto createSnippet(SnippetCreateDto snippetCreateDto, Integer userId) {
-		Folder folder = folderService.findDefaultFolderByUserId(userId);
+		Folder folder = Objects.nonNull(snippetCreateDto.folderId()) ? folderService.findByIdAndUserId(snippetCreateDto.folderId(), userId) : folderService.findDefaultFolderByUserId(userId);
 		Snippet snippet = new Snippet(snippetCreateDto, folder);
 		Snippet snippetSaved = repository.save(snippet);
 		SnippetResponseDto response = this.createSnippetResponseDto(snippetSaved);

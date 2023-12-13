@@ -7,6 +7,6 @@ import jakarta.validation.constraints.NotNull;
 
 @JsonFormat(with = JsonFormat.Feature.ACCEPT_CASE_INSENSITIVE_PROPERTIES)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public record SnippetCreateDto(String name, String content, @NotNull Integer folderId) {
+public record SnippetCreateDto(String name, String content, Integer folderId) {
 
 }
