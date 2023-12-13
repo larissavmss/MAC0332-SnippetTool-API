@@ -1,8 +1,12 @@
 package br.com.usp.mac0332.snippettool.dto.snippet;
 
-import jakarta.validation.constraints.NotBlank;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.validation.constraints.NotNull;
 
-public record SnippetCreateDto(@NotBlank String name, @NotBlank String content, @NotNull Integer folderId) {
+@JsonFormat(with = JsonFormat.Feature.ACCEPT_CASE_INSENSITIVE_PROPERTIES)
+@JsonIgnoreProperties(ignoreUnknown = true)
+public record SnippetCreateDto(String name, String content, @NotNull Integer folderId) {
 
 }
