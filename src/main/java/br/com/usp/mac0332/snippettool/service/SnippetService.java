@@ -63,6 +63,7 @@ public class SnippetService {
 		return snippetResponseDto;
 	}
 
+	@Transactional
 	public void deleteSnippet(Integer snippetId, Integer userId) {
 		repository.deleteByIdAndFolder_User_Id(snippetId, userId);
 	}
