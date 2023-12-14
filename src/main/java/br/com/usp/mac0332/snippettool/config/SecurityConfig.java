@@ -43,6 +43,8 @@ public class SecurityConfig {
 		// We are disabling CSRF so that our forms don't complain about a CSRF token.
 		// Beware that it can create a security vulnerability
 		return http.csrf(AbstractHttpConfigurer::disable)
+				.cors() // Enable CORS support
+                .and()
 				.authorizeHttpRequests((authorize) -> authorize
 						.requestMatchers(POST, "auth/login").permitAll()
 						.requestMatchers(POST, "auth/register").permitAll()
