@@ -68,6 +68,7 @@ public class FolderServiceTest {
 		Folder folder = Folder.builder().name("folder test").build();
 		Optional<Folder> optionalFolder = Optional.of(folder);
 		when(repository.findByIdAndUserId(Mockito.anyInt(), Mockito.anyInt())).thenReturn(optionalFolder);
+		when(repository.save(Mockito.any(Folder.class))).thenReturn(folder);
 		FolderResponseDto folderResponseDto = service.updateFolder(folderId, folderUpdateDto, userId);
 		Assertions.assertThat(folderResponseDto).isNotNull();
 	}
@@ -92,10 +93,23 @@ public class FolderServiceTest {
 
 	@Test
 	public void findByIdAndUserIdToDto_Should_Return_Dto() {
-		
+		int folderId = 1;
+		int userId = 1;
+		Folder folder = Folder.builder().name("folder test").build();
+		Optional<Folder> optionalFolder = Optional.of(folder);
+		when(repository.findByIdAndUserId(Mockito.anyInt(), Mockito.anyInt())).thenReturn(optionalFolder);
+		FolderResponseDto folderResponseDto = service.findByIdAndUserIdToDto(folderId, userId);
+		Assertions.assertThat(folderResponseDto).isNotNull();
 	}
 
 	@Test
 	public void findByIdAndUserId_Should_Return_Nothing() {
+		int folderId = 1;
+		int userId = 1;
+		Folder folder = Folder.builder().name("folder test").build();
+		Optional<Folder> optionalFolder = Optional.of(folder);
+		when(repository.findByIdAndUserId(Mockito.anyInt(), Mockito.anyInt())).thenReturn(optionalFolder);
+		Folder folderResponse = service.findByIdAndUserId(folderId, userId);
+		Assertions.assertThat(folderResponse).isNotNull();
 	}
 }
