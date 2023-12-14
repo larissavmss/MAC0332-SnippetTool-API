@@ -2,6 +2,7 @@ package br.com.usp.mac0332.snippettool.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -48,6 +49,7 @@ public class AuthController {
 		securityContextRepository.saveContext(context, request, response);
 	}
 
+	@PreAuthorize("permitAll()")
 	@PostMapping("/register")
 	public ResponseEntity<UserResponseDto> register(@RequestBody AuthRegisterDto registerDto) {
 		UserResponseDto response = userService.create(registerDto);
