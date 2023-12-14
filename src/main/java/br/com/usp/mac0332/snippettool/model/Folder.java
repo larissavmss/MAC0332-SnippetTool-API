@@ -41,6 +41,10 @@ public class Folder {
 	@ManyToOne(cascade = {CascadeType.MERGE})
 	@JoinColumn(name = "user_id")
 	private User user;
+	
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "folder_id")
+	private Folder folder;
 
 	public Folder (FolderCreateDto folderCreateDto, User user) {
 		this.name = folderCreateDto.name();

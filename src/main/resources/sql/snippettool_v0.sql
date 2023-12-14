@@ -37,7 +37,7 @@ CREATE TABLE public."snippet"(
 	CONSTRAINT "FK_folder_id" FOREIGN KEY("folder_id") 
 		REFERENCES public."folder"("id")
 		ON UPDATE CASCADE
-		ON DELETE RESTRICT
+		ON DELETE CASCADE
 );
 
 CREATE TABLE public."tag_snippet"(
