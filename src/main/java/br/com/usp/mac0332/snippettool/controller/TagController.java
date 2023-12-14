@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.usp.mac0332.snippettool.dto.tag.TagColorResponseDto;
@@ -40,9 +41,9 @@ public class TagController {
 		return ResponseEntity.ok(response);
 	}
 
-	@GetMapping
-	public ResponseEntity<List<TagResponseDto>> readTags(@AuthenticationPrincipal UserDetails userDetails) {
-		List<TagResponseDto> response = service.readTags(((MyUserDetails) userDetails).user.id);
+	@GetMapping("/")
+	public ResponseEntity<List<TagResponseDto>> readTags(@RequestParam String filtro, @AuthenticationPrincipal UserDetails userDetails) {
+		List<TagResponseDto> response = service.readTags(((MyUserDetails) userDetails).user.id, filtro);
 		return ResponseEntity.ok(response);
 	}
 

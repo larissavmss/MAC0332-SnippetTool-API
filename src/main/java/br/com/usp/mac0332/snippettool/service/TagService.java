@@ -27,8 +27,8 @@ public class TagService {
 		return tagResponseDto;
 	}
 
-	public List<TagResponseDto> readTags(Integer userId) {
-		List<Tag> tags = repository.findByUser_Id(userId);
+	public List<TagResponseDto> readTags(Integer userId, String filtro) {
+		List<Tag> tags = repository.findByUser_IdAndNameContaining(userId, filtro);
 		List<TagResponseDto> tagsResponseDto = tags.stream().map(TagResponseDto::new).toList();
 		return tagsResponseDto;
 	}

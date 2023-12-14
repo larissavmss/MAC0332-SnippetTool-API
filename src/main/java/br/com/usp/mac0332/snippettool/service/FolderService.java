@@ -27,14 +27,8 @@ public class FolderService {
 		return folderResponseDto;
 	}
 
-	public List<FolderResponseDto> findByName(String name, Integer userId) {
-		List<Folder> folders = repository.findByNameContainingAndUserId(name, userId);
-		List<FolderResponseDto> foldersResponseDto = folders.stream().map(FolderResponseDto::new).toList();
-		return foldersResponseDto;
-	}
-
-	public List<FolderResponseDto> getAll(Integer id) {
-		List<Folder> folders = repository.findByUserId(id);
+	public List<FolderResponseDto> getAll(Integer id, String filtro) {
+		List<Folder> folders = repository.findByUserIdAndNameContaining(id, filtro);
 		List<FolderResponseDto> foldersResponseDto = folders.stream().map(FolderResponseDto::new).toList();
 		return foldersResponseDto;
 	}

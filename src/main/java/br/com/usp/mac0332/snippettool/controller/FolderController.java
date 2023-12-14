@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.usp.mac0332.snippettool.dto.folder.FolderCreateDto;
@@ -37,18 +38,12 @@ public class FolderController {
 		return ResponseEntity.ok(response);
 	}
 
-	@GetMapping
-	public ResponseEntity<List<FolderResponseDto >> getAll(@AuthenticationPrincipal UserDetails userDetails) {
-		List<FolderResponseDto> response = folderService.getAll(((MyUserDetails) userDetails).user.id);
+	@GetMapping("/")
+	public ResponseEntity<List<FolderResponseDto>> getAll(@RequestParam String filtro, @AuthenticationPrincipal UserDetails userDetails) {
+		List<FolderResponseDto> response = folderService.getAll(((MyUserDetails) userDetails).user.id, filtro);
 		return ResponseEntity.ok(response);
 	}
 
-	@GetMapping("/filtro/{name}")
-	public ResponseEntity<List<FolderResponseDto>> findByName(@PathVariable String name, @AuthenticationPrincipal UserDetails userDetails) {
-		List<FolderResponseDto> response = folderService.findByName(name, ((MyUserDetails) userDetails).user.id);
-		return ResponseEntity.ok(response);
-	}
-	
 	@GetMapping("/{folderId}")
 	public ResponseEntity<FolderResponseDto> findById(@PathVariable Integer folderId, @AuthenticationPrincipal UserDetails userDetails) {
 		FolderResponseDto response = folderService.findByIdAndUserIdToDto(folderId, ((MyUserDetails) userDetails).user.id);

@@ -9,7 +9,7 @@ import br.com.usp.mac0332.snippettool.model.Tag;
 
 public interface TagRepository extends JpaRepository<Tag, Integer> {
 	
-	List<Tag> findByUser_Id(Integer userId);
+	List<Tag> findByUser_IdAndNameContaining(Integer userId, String filtro);
 
 	Optional<Tag> findByIdAndUser_Id(Integer tagId, Integer userId);
 	
