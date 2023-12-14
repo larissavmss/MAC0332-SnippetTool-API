@@ -17,6 +17,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -27,6 +28,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Folder {
 
 	@Id
@@ -38,14 +40,10 @@ public class Folder {
 	@CreationTimestamp
 	private Date creationDate;
 
-	@ManyToOne(cascade = {CascadeType.MERGE})
+	@ManyToOne(cascade = {CascadeType.MERGE, CascadeType.DETACH, CascadeType.PERSIST, CascadeType.REFRESH})
 	@JoinColumn(name = "user_id")
 	private User user;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "folder_id")
-	private Folder folder;
-
 	public Folder (FolderCreateDto folderCreateDto, User user) {
 		this.name = folderCreateDto.name();
 		this.user = user;
