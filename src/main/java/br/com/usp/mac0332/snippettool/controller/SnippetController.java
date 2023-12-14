@@ -9,7 +9,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -71,13 +70,13 @@ public class SnippetController {
 		return ResponseEntity.noContent().build();
 	}
 
-	@PatchMapping("/{snippetId}/addTag/{tagId}")
+	@PutMapping("/{snippetId}/addTag/{tagId}")
 	public ResponseEntity<SnippetResponseDto> addTagToSnippet(@PathVariable Integer snippetId, @PathVariable Integer tagId, @AuthenticationPrincipal UserDetails userDetails) {
 		SnippetResponseDto response = service.addTagToSnippet(snippetId, tagId, ((MyUserDetails) userDetails).user.id);
 		return ResponseEntity.ok(response);
 	}
 
-	@PatchMapping("/{snippetId}/removeTag/{tagId}")
+	@PutMapping("/{snippetId}/removeTag/{tagId}")
 	public ResponseEntity<SnippetResponseDto> removeTagFromSnippet(@PathVariable Integer snippetId, @PathVariable Integer tagId, @AuthenticationPrincipal UserDetails userDetails) {
 		SnippetResponseDto response = service.removeTagFromSnippet(snippetId, tagId, ((MyUserDetails) userDetails).user.id);
 		return ResponseEntity.ok(response);
