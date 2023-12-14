@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.usp.mac0332.snippettool.dto.snippet.SnippetCreateDto;
@@ -37,9 +38,9 @@ public class SnippetController {
 		return ResponseEntity.ok(response);
 	}
 
-	@GetMapping
-	public ResponseEntity<List<SnippetResponseDto>> readSnippets(@AuthenticationPrincipal UserDetails userDetails) {
-		List<SnippetResponseDto> response = service.readSnippets(((MyUserDetails) userDetails).user.id);
+	@GetMapping("/")
+	public ResponseEntity<List<SnippetResponseDto>> readSnippets(@RequestParam String filtro, @AuthenticationPrincipal UserDetails userDetails) {
+		List<SnippetResponseDto> response = service.readSnippets(filtro, ((MyUserDetails) userDetails).user.id);
 		return ResponseEntity.ok(response);
 	}
 
@@ -80,4 +81,15 @@ public class SnippetController {
 		return ResponseEntity.ok(response);
 	}
 
+	@GetMapping("/folder/{folderId}/")
+	public ResponseEntity<List<SnippetResponseDto>> getSnippetsByFolder(@PathVariable Integer folderId, @RequestParam String filtro, @AuthenticationPrincipal UserDetails userDetails){
+		List<SnippetResponseDto> response = service.findByFolderAndFiltro(folderId, filtro, ((MyUserDetails) userDetails).user.id);
+		return ResponseEntity.ok(response);
+	}
+	
+	@GetMapping("/tag/{tagId}/")
+	public ResponseEntity<List<SnippetResponseDto>> getSnippetsByTag(@PathVariable Integer tagId, @RequestParam String filtro, @AuthenticationPrincipal UserDetails userDetails){
+		List<SnippetResponseDto> response = service.findByTagAndFiltro(tagId, filtro, ((MyUserDetails) userDetails).user.id);
+		return ResponseEntity.ok(response);
+	}
 }
