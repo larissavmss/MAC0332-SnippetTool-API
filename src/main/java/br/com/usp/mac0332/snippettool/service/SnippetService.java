@@ -39,8 +39,8 @@ public class SnippetService {
 		return response;
 	}
 
-	public List<SnippetResponseDto> readSnippets(Integer userId) {
-		List<Snippet> snippets = repository.findByFolder_User_Id(userId);
+	public List<SnippetResponseDto> readSnippets(String filtro, Integer userId) {
+		List<Snippet> snippets = repository.findByFolder_User_IdAndNameContaining(userId, filtro);
 		List<SnippetResponseDto> snippetsResponseDto = snippets.stream().map(this::createSnippetResponseDto).toList();
 		return snippetsResponseDto;
 	}
@@ -84,8 +84,14 @@ public class SnippetService {
 		return snippetResponseDto;
 	}
 	
-	public List<SnippetResponseDto> findByFiltro(Integer folderId, Integer userId){
-		List<Snippet> snippets = repository.findByFolder_IdAndFolder_User_Id(folderId, userId);
+	public List<SnippetResponseDto> findByFolderAndFiltro(Integer folderId, String filtro, Integer userId){
+		List<Snippet> snippets = repository.findByFolder_IdAndFolder_User_IdAndNameContaining(folderId, userId, filtro);
+		List<SnippetResponseDto> snippetsResponseDto = snippets.stream().map(this::createSnippetResponseDto).toList();
+		return snippetsResponseDto;
+	}
+	
+	public List<SnippetResponseDto> findByTagAndFiltro(Integer folderId, String filtro, Integer userId){
+		List<Snippet> snippets = repository.findByTags_IdAndFolder_User_IdAndNameContaining(folderId, userId, filtro);
 		List<SnippetResponseDto> snippetsResponseDto = snippets.stream().map(this::createSnippetResponseDto).toList();
 		return snippetsResponseDto;
 	}

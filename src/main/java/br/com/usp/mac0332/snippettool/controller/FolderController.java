@@ -19,10 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.usp.mac0332.snippettool.dto.folder.FolderCreateDto;
 import br.com.usp.mac0332.snippettool.dto.folder.FolderResponseDto;
 import br.com.usp.mac0332.snippettool.dto.folder.FolderUpdateDto;
-import br.com.usp.mac0332.snippettool.dto.snippet.SnippetResponseDto;
 import br.com.usp.mac0332.snippettool.service.FolderService;
 import br.com.usp.mac0332.snippettool.service.MyUserDetails;
-import br.com.usp.mac0332.snippettool.service.SnippetService;
 import jakarta.validation.Valid;
 
 @CrossOrigin(origins = "http://localhost:3000")
@@ -33,9 +31,6 @@ public class FolderController {
 	@Autowired
 	FolderService folderService;
 	
-	@Autowired
-	SnippetService snippetService;
-
 	@PostMapping
 	public ResponseEntity<FolderResponseDto> addFolder(@Valid @RequestBody FolderCreateDto folderCreateDto, @AuthenticationPrincipal UserDetails userDetails) {
 		FolderResponseDto response = folderService.addFolder(folderCreateDto, ((MyUserDetails) userDetails).user);
@@ -70,12 +65,6 @@ public class FolderController {
 	public ResponseEntity<Void> deleteFolder(@PathVariable Integer folderId, @AuthenticationPrincipal UserDetails userDetails) {
 		folderService.deleteFolder(folderId, ((MyUserDetails) userDetails).user.id);
 		return ResponseEntity.noContent().build();
-	}
-	
-	@GetMapping("/{folderId}/snippets")
-	public ResponseEntity<List<SnippetResponseDto>> getSnippets(@PathVariable Integer folderId, @AuthenticationPrincipal UserDetails userDetails){
-		List<SnippetResponseDto> response = snippetService.findByFiltro(folderId, ((MyUserDetails) userDetails).user.id);
-		return ResponseEntity.ok(response);
 	}
 
 }
