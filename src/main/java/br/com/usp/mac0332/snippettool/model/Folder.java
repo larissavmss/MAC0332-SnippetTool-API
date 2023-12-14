@@ -4,6 +4,12 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 
 import java.sql.Date;
 
+import org.hibernate.annotations.CreationTimestamp;
+
+import br.com.usp.mac0332.snippettool.dto.folder.FolderCreateDto;
+import br.com.usp.mac0332.snippettool.dto.folder.FolderUpdateDto;
+import io.micrometer.common.util.StringUtils;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -29,10 +35,25 @@ public class Folder {
 
 	private String name;
 
+	@CreationTimestamp
 	private Date creationDate;
 
-	@ManyToOne
+	@ManyToOne(cascade = {CascadeType.MERGE})
 	@JoinColumn(name = "user_id")
 	private User user;
+	
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "folder_id")
+	private Folder folder;
 
+	public Folder (FolderCreateDto folderCreateDto, User user) {
+		this.name = folderCreateDto.name();
+		this.user = user;
+	}
+
+	public void update(FolderUpdateDto updatedFolder) {
+		if (StringUtils.isNotBlank(updatedFolder.name())) {
+			this.name = updatedFolder.name();
+		}
+	}
 }

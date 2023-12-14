@@ -1,29 +1,65 @@
 package br.com.usp.mac0332.snippettool.controller;
 
-import br.com.usp.mac0332.snippettool.model.Folder;
-import br.com.usp.mac0332.snippettool.service.FolderService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import br.com.usp.mac0332.snippettool.dto.folder.FolderCreateDto;
+import br.com.usp.mac0332.snippettool.dto.folder.FolderResponseDto;
+import br.com.usp.mac0332.snippettool.dto.folder.FolderUpdateDto;
+import br.com.usp.mac0332.snippettool.service.FolderService;
+import br.com.usp.mac0332.snippettool.service.MyUserDetails;
+import jakarta.validation.Valid;
+
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("folder")
 public class FolderController {
-    @Autowired
-    FolderService folderService;
-    @PostMapping("/add")
-    public void addFolder(@RequestBody Folder folder){
-        folderService.addFolder(folder);
-    }
 
-    @GetMapping("/findByName")
-    public Folder findByName(@RequestParam("name") String name){
-        return folderService.findByName(name);
-    }
+	@Autowired
+	FolderService folderService;
+	
+	@PostMapping
+	public ResponseEntity<FolderResponseDto> addFolder(@Valid @RequestBody FolderCreateDto folderCreateDto, @AuthenticationPrincipal UserDetails userDetails) {
+		FolderResponseDto response = folderService.addFolder(folderCreateDto, ((MyUserDetails) userDetails).user);
+		return ResponseEntity.ok(response);
+	}
 
-    @GetMapping("/getAll")
-    public List<Folder> getAll(){
-        return folderService.getAll();
-    }
+	@GetMapping("/")
+	public ResponseEntity<List<FolderResponseDto>> getAll(@RequestParam String filtro, @AuthenticationPrincipal UserDetails userDetails) {
+		List<FolderResponseDto> response = folderService.getAll(((MyUserDetails) userDetails).user.id, filtro);
+		return ResponseEntity.ok(response);
+	}
+
+	@GetMapping("/{folderId}")
+	public ResponseEntity<FolderResponseDto> findById(@PathVariable Integer folderId, @AuthenticationPrincipal UserDetails userDetails) {
+		FolderResponseDto response = folderService.findByIdAndUserIdToDto(folderId, ((MyUserDetails) userDetails).user.id);
+		return ResponseEntity.ok(response);
+	}
+
+	@PutMapping("/{folderId}")
+	public ResponseEntity<FolderResponseDto> updateFolder(@PathVariable Integer folderId, @Valid @RequestBody FolderUpdateDto updatedFolder, @AuthenticationPrincipal UserDetails userDetails) {
+		FolderResponseDto response = folderService.updateFolder(folderId, updatedFolder, ((MyUserDetails) userDetails).user.id);
+		return ResponseEntity.ok(response);
+	}
+
+	@DeleteMapping("/{folderId}")
+	public ResponseEntity<Void> deleteFolder(@PathVariable Integer folderId, @AuthenticationPrincipal UserDetails userDetails) {
+		folderService.deleteFolder(folderId, ((MyUserDetails) userDetails).user.id);
+		return ResponseEntity.noContent().build();
+	}
+
 }

@@ -1,10 +1,15 @@
 package br.com.usp.mac0332.snippettool.model;
 
+import static jakarta.persistence.CascadeType.REFRESH;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
 import java.util.Set;
 
+import br.com.usp.mac0332.snippettool.dto.tag.TagCreateDto;
+import br.com.usp.mac0332.snippettool.dto.tag.TagUpdateDto;
 import br.com.usp.mac0332.snippettool.enums.Color;
+import io.micrometer.common.util.StringUtils;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -41,8 +46,32 @@ public class Tag {
 	@JoinColumn(name = "user_id")
 	private User user;
 
-	@ManyToMany
+	@ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, REFRESH})
 	@JoinTable(name = "tag_snippet", joinColumns = @JoinColumn(name = "tag_id"), inverseJoinColumns = @JoinColumn(name = "snippet_id"))
 	private Set<Snippet> snippets;
+
+	public Tag(TagCreateDto tagDto, User user) {
+		this.name = tagDto.name();
+		this.color = Color.valueOf(tagDto.color());
+		this.user = user;
+	}
+	
+	public void addSnippet(Snippet snippet) {
+		this.snippets.add(snippet);
+	}
+	
+	public void removeSnippet(Snippet snippet) {
+		this.snippets.remove(snippet);
+	}
+
+	public Tag update(TagUpdateDto updatedTag) {
+		if (StringUtils.isNotBlank(updatedTag.name())) {
+			this.setName(updatedTag.name());
+		}
+		if (StringUtils.isNotBlank(updatedTag.color())) {
+			this.setColor(Color.valueOf(updatedTag.color()));
+		}
+		return this;
+	}
 
 }

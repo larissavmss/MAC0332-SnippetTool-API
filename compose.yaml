@@ -1,10 +1,25 @@
 services:
+  back:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    image: snippet_back:latest
+    restart: always
+    ports:
+      - 8080:8080
+    expose:
+      - 8080
+    command: mvn spring-boot:run
+    depends_on:
+      - pgsql
   pgsql:
     image: postgres:15.3@sha256:362a63cb1e864195ea2bc29b5066bdb222bc9a4461bfaff2418f63a06e56bce0
     restart: always
     user: postgres
     ports:
       - 5432:5432
+    expose:
+      - 5432
     secrets:
       - sql-password
     environment:
