@@ -1,4 +1,4 @@
-CREATE TABLE public."user"(
+CREATE TABLE public."app_user"(
 	"id" SERIAL PRIMARY KEY,
 	"username" VARCHAR(40) NOT NULL UNIQUE, 
 	"email" VARCHAR(80) NOT NULL UNIQUE,
@@ -12,7 +12,7 @@ CREATE TABLE public."folder"(
 	"creation_date" DATE NOT NULL,
 	"user_id" INTEGER,
 	CONSTRAINT "FK_user_id" FOREIGN KEY("user_id") 
-		REFERENCES public."user"("id")
+		REFERENCES public."app_user"("id")
 		ON UPDATE CASCADE
 		ON DELETE CASCADE
 );
@@ -23,7 +23,7 @@ CREATE TABLE public."tag"(
 	"color" VARCHAR(10) NOT NULL,
 	"user_id" INTEGER,
 	CONSTRAINT "FK_user_id" FOREIGN KEY("user_id") 
-		REFERENCES public."user"("id")
+		REFERENCES public."app_user"("id")
 		ON UPDATE CASCADE
 		ON DELETE CASCADE
 );
