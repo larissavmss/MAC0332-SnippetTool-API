@@ -27,7 +27,7 @@ Além desse repositório, para usar a interface gráfica do sistema é necessár
 
 - Larissa Vitória Medeiros Silva
 - Kaique Nunes de Oliveira
-- Luís Gabriel Lima Arrais
+- Luiz Gabriel Lima Arrais
 - Cássio Azevedo Cancio
 - Nathan de Oliveira Nunes
 
